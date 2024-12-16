@@ -3,7 +3,15 @@
 
 Welcome to the **Dynamic Notification System**! 🚀 This project was created to address the growing need for a scalable, flexible, and multi-platform notification solution in modern applications. 🎉
 
-[![Go Build and Release](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml/badge.svg)](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml) ![Linux Support](https://img.shields.io/badge/platform-linux-green.svg?logo=linux&style=flat-square)
+[![Go Build and Release](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml/badge.svg)](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml)
+![Linux Support](https://img.shields.io/badge/platform-linux-green.svg?logo=linux&style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
+![Go Version](https://img.shields.io/badge/go-1.23-blue?logo=go&style=flat-square)
+![GitHub release](https://img.shields.io/github/v/release/zrougamed/dynamic-notification-system?style=flat-square)
+![Maintained](https://img.shields.io/badge/maintained-yes-green.svg?style=flat-square)
+
+
+
 
 
 ## 🌟 Why We Built This
