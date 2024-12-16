@@ -64,3 +64,4 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 
 🌟 **Star this repository** if you find it helpful, and don’t forget to share it with others who might benefit! ⭐
 
+[![Go Build and Release](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml/badge.svg)](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml)
