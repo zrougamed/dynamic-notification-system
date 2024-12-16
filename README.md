@@ -3,6 +3,9 @@
 
 Welcome to the **Dynamic Notification System**! 🚀 This project was created to address the growing need for a scalable, flexible, and multi-platform notification solution in modern applications. 🎉
 
+[![Go Build and Release](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml/badge.svg)](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml) ![Linux Support](https://img.shields.io/badge/platform-linux-green.svg?logo=linux&style=flat-square)
+
+
 ## 🌟 Why We Built This
 
 In today's fast-paced digital world, businesses and individuals need to communicate across a variety of platforms, protocols, and channels. Whether it's sending notifications to chat applications, email, SMS, or push notifications, the complexity of managing these systems can become overwhelming.
@@ -64,4 +67,3 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 
 🌟 **Star this repository** if you find it helpful, and don’t forget to share it with others who might benefit! ⭐
 
-[![Go Build and Release](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml/badge.svg)](https://github.com/zrougamed/dynamic-notification-system/actions/workflows/go.yml)
