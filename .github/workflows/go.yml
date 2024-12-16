@@ -97,14 +97,7 @@ jobs:
     strategy:
       matrix:
         platform: [darwin]
-        arch: [amd64,arm64] # Intel (amd64) and Apple M-series (arm64)
-        include:
-          - platform: macos
-            arch: amd64
-            runs_on: macos-latest
-          - platform: macos
-            arch: arm64
-            runs_on: macos-latest
+        arch: [amd64] # Intel (amd64) and Apple M-series (arm64)
     runs-on: ubuntu-latest
     steps:
     # Step 1: Check out the code
