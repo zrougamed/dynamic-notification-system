@@ -1,0 +1,84 @@
+# This workflow builds the Go project, its plugins, and creates a release with the build folder
+name: Go Build and Release
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Step 2: Set up Go environment
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23.2'
+
+    # Step 3: Cache Go modules
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    # Step 4: Install dependencies
+    - name: Install dependencies
+      run: go mod tidy
+
+    # Step 5: Generate release tag
+    - name: Generate release tag
+      id: generate_tag
+      run: |
+        MAJOR=1
+        MINOR=0
+        echo "RELEASE_TAG=v${MAJOR}.${MINOR}" >> $GITHUB_ENV
+
+    # Step 6: Create Git tag
+    - name: Create Git tag
+      run: |
+        git tag ${{ env.RELEASE_TAG }}
+        git push origin ${{ env.RELEASE_TAG }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Step 7: Build the main application
+    - name: Build main application
+      run: go build -o build/notification-system main.go
+
+    # Step 8: Build plugins
+    - name: Build plugins
+      run: |
+        mkdir -p build/plugins
+        go build -buildmode=plugin -o build/plugins/telegram.so plugins/telegram/telegram.go
+        go build -buildmode=plugin -o build/plugins/discord.so plugins/discord/discord.go
+        go build -buildmode=plugin -o build/plugins/slack.so plugins/slack/slack.go
+        go build -buildmode=plugin -o build/plugins/teams.so plugins/teams/teams.go
+        go build -buildmode=plugin -o build/plugins/webhook.so plugins/webhook/webhook.go
+        go build -buildmode=plugin -o build/plugins/smtp.so plugins/smtp/smtp.go
+        go build -buildmode=plugin -o build/plugins/push.so plugins/push/push.go
+        go build -buildmode=plugin -o build/plugins/sms.so plugins/sms/sms.go
+        go build -buildmode=plugin -o build/plugins/signal.so plugins/signal/signal.go
+        go build -buildmode=plugin -o build/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
+
+    # Step 9: Archive the build folder
+    - name: Archive build folder
+      run: zip -r dynamic-notification-system-${{ env.RELEASE_TAG }}.zip build/
+
+    # Step 10: Create GitHub Release
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.RELEASE_TAG }}
+        files: dynamic-notification-system-${{ env.RELEASE_TAG }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
