@@ -105,7 +105,7 @@ jobs:
           - platform: macos
             arch: arm64
             runs_on: macos-latest
-    runs-on: ${{ matrix.runs_on }}
+    runs-on: ubuntu-latest
     steps:
     # Step 1: Check out the code
     - name: Checkout repository
@@ -155,22 +155,22 @@ jobs:
     - name: Build main application
       run: |
         mkdir -p build/${{ matrix.platform }}-${{ matrix.arch }}
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -o build/${{ matrix.platform }}-${{ matrix.arch }}/notification-system main.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1  go build -o build/${{ matrix.platform }}-${{ matrix.arch }}/notification-system main.go
 
     # Step 7: Build plugins for each platform
     - name: Build plugins
       run: |
         mkdir -p build/${{ matrix.platform }}-${{ matrix.arch }}/plugins
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/telegram.so plugins/telegram/telegram.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/discord.so plugins/discord/discord.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/slack.so plugins/slack/slack.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/teams.so plugins/teams/teams.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/webhook.so plugins/webhook/webhook.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/smtp.so plugins/smtp/smtp.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/push.so plugins/push/push.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/sms.so plugins/sms/sms.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/signal.so plugins/signal/signal.go
-        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/telegram.so plugins/telegram/telegram.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/discord.so plugins/discord/discord.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/slack.so plugins/slack/slack.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/teams.so plugins/teams/teams.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/webhook.so plugins/webhook/webhook.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/smtp.so plugins/smtp/smtp.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/push.so plugins/push/push.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/sms.so plugins/sms/sms.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/signal.so plugins/signal/signal.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} CGO_ENABLED=1 go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
 
     # Step 8: Archive the build folder for each platform
     - name: Archive build folder
