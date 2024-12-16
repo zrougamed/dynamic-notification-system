@@ -1,5 +1,5 @@
-# This workflow builds the Go project, its plugins, and creates a release with the build folder
-name: Go Build and Release
+# This workflow builds the Go project for multiple platforms and creates a release
+name: Go Multi-Platform Build and Release
 
 on:
   push:
@@ -10,6 +10,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform: [linux, windows, macos]
+        arch: [amd64, arm64] # Intel (amd64) and Apple M-series (arm64)
 
     steps:
     # Step 1: Check out the code
@@ -39,45 +44,58 @@ jobs:
     - name: Generate release tag
       id: generate_tag
       run: |
-        RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')
-        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+        MAJOR=1
+        MINOR=0
+        echo "RELEASE_TAG=v${MAJOR}.${MINOR}" >> $GITHUB_ENV
 
-    # Step 6: Create Git tag
-    - name: Create Git tag
-      run: |
-        git tag ${{ env.RELEASE_TAG }}
-        git push origin ${{ env.RELEASE_TAG }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # Step 7: Build the main application
+    # Step 6: Build the main application for each platform
     - name: Build main application
-      run: go build -o build/notification-system main.go
+      run: |
+        mkdir -p build/${{ matrix.platform }}-${{ matrix.arch }}
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -o build/${{ matrix.platform }}-${{ matrix.arch }}/notification-system main.go
 
-    # Step 8: Build plugins
+    # Step 7: Build plugins for each platform
     - name: Build plugins
       run: |
-        mkdir -p build/plugins
-        go build -buildmode=plugin -o build/plugins/telegram.so plugins/telegram/telegram.go
-        go build -buildmode=plugin -o build/plugins/discord.so plugins/discord/discord.go
-        go build -buildmode=plugin -o build/plugins/slack.so plugins/slack/slack.go
-        go build -buildmode=plugin -o build/plugins/teams.so plugins/teams/teams.go
-        go build -buildmode=plugin -o build/plugins/webhook.so plugins/webhook/webhook.go
-        go build -buildmode=plugin -o build/plugins/smtp.so plugins/smtp/smtp.go
-        go build -buildmode=plugin -o build/plugins/push.so plugins/push/push.go
-        go build -buildmode=plugin -o build/plugins/sms.so plugins/sms/sms.go
-        go build -buildmode=plugin -o build/plugins/signal.so plugins/signal/signal.go
-        go build -buildmode=plugin -o build/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
+        mkdir -p build/${{ matrix.platform }}-${{ matrix.arch }}/plugins
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/telegram.so plugins/telegram/telegram.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/discord.so plugins/discord/discord.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/slack.so plugins/slack/slack.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/teams.so plugins/teams/teams.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/webhook.so plugins/webhook/webhook.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/smtp.so plugins/smtp/smtp.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/push.so plugins/push/push.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/sms.so plugins/sms/sms.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/signal.so plugins/signal/signal.go
+        GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -buildmode=plugin -o build/${{ matrix.platform }}-${{ matrix.arch }}/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
 
-    # Step 9: Archive the build folder
+    # Step 8: Archive the build folder for each platform
     - name: Archive build folder
-      run: zip -r dynamic-notification-system-${{ env.RELEASE_TAG }}.zip build/
+      run: zip -r dynamic-notification-system-${{ env.RELEASE_TAG }}-${{ matrix.platform }}-${{ matrix.arch }}.zip build/${{ matrix.platform }}-${{ matrix.arch }}
 
-    # Step 10: Create GitHub Release
+    # Step 9: Upload artifacts
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dynamic-notification-system-${{ env.RELEASE_TAG }}-${{ matrix.platform }}-${{ matrix.arch }}
+        path: dynamic-notification-system-${{ env.RELEASE_TAG }}-${{ matrix.platform }}-${{ matrix.arch }}.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Download artifacts
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: artifacts
+
+    # Step 2: Create GitHub Release
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
+        files: artifacts/**/*.zip
         tag_name: ${{ env.RELEASE_TAG }}
-        files: dynamic-notification-system-${{ env.RELEASE_TAG }}.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
