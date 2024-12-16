@@ -39,9 +39,8 @@ jobs:
     - name: Generate release tag
       id: generate_tag
       run: |
-        MAJOR=1
-        MINOR=0
-        echo "RELEASE_TAG=v${MAJOR}.${MINOR}" >> $GITHUB_ENV
+        RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')
+        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
 
     # Step 6: Create Git tag
     - name: Create Git tag
