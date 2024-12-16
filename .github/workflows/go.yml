@@ -75,7 +75,7 @@ jobs:
         body: |
           This release includes the compiled binaries and plugins for the dynamic-notification-system.
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     # Step 10: Upload Release Asset
     - name: Upload Release Asset
@@ -86,4 +86,4 @@ jobs:
         asset_name: dynamic-notification-system-${{ steps.generate_tag.outputs.tag }}.zip
         asset_content_type: application/zip
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
