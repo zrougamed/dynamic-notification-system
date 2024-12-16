@@ -13,8 +13,8 @@ jobs:
 
     strategy:
       matrix:
-        platform: [linux, windows, macos]
-        arch: [amd64, arm64] # Intel (amd64) and Apple M-series (arm64)
+        platform: [linux, windows, darwin]
+        arch: [amd64] # Intel (amd64) and Apple M-series (arm64)
 
     steps:
     # Step 1: Check out the code
