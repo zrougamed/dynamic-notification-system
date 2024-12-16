@@ -1,5 +1,5 @@
-# This workflow builds the Go project and its plugins
-name: Go Build and Plugins
+# This workflow builds the Go project, its plugins, and creates a release with the build folder
+name: Go Build and Release
 
 on:
   push:
@@ -35,13 +35,19 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
 
-    # Step 5: Build the main application
+    # Step 5: Generate release tag
+    - name: Generate release tag
+      id: generate_tag
+      run: echo "::set-output name=tag::v$(date +'%Y%m%d%H%M%S')"
+
+    # Step 6: Build the main application
     - name: Build main application
       run: go build -o build/notification-system main.go
 
-    # Step 6: Build plugins
+    # Step 7: Build plugins
     - name: Build plugins
       run: |
+        mkdir -p build/plugins
         go build -buildmode=plugin -o build/plugins/telegram.so plugins/telegram/telegram.go
         go build -buildmode=plugin -o build/plugins/discord.so plugins/discord/discord.go
         go build -buildmode=plugin -o build/plugins/slack.so plugins/slack/slack.go
@@ -52,3 +58,28 @@ jobs:
         go build -buildmode=plugin -o build/plugins/sms.so plugins/sms/sms.go
         go build -buildmode=plugin -o build/plugins/signal.so plugins/signal/signal.go
         go build -buildmode=plugin -o build/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
+
+    # Step 8: Archive the build folder
+    - name: Archive build folder
+      run: zip -r dynamic-notification-system-${{ steps.generate_tag.outputs.tag }}.zip build/
+
+    # Step 9: Create GitHub Release
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ steps.generate_tag.outputs.tag }}
+        release_name: Release ${{ steps.generate_tag.outputs.tag }}
+        draft: false
+        prerelease: false
+        body: |
+          This release includes the compiled binaries and plugins for the dynamic-notification-system.
+
+    # Step 10: Upload Release Asset
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: dynamic-notification-system-${{ steps.generate_tag.outputs.tag }}.zip
+        asset_name: dynamic-notification-system-${{ steps.generate_tag.outputs.tag }}.zip
+        asset_content_type: application/zip
