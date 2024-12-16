@@ -38,13 +38,23 @@ jobs:
     # Step 5: Generate release tag
     - name: Generate release tag
       id: generate_tag
-      run: echo "::set-output name=tag::v$(date +'%Y%m%d%H%M%S')"
+      run: |
+        RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')
+        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
 
-    # Step 6: Build the main application
+    # Step 6: Create Git tag
+    - name: Create Git tag
+      run: |
+        git tag ${{ env.RELEASE_TAG }}
+        git push origin ${{ env.RELEASE_TAG }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Step 7: Build the main application
     - name: Build main application
       run: go build -o build/notification-system main.go
 
-    # Step 7: Build plugins
+    # Step 8: Build plugins
     - name: Build plugins
       run: |
         mkdir -p build/plugins
@@ -59,11 +69,11 @@ jobs:
         go build -buildmode=plugin -o build/plugins/signal.so plugins/signal/signal.go
         go build -buildmode=plugin -o build/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
 
-    # Step 8: Archive the build folder
+    # Step 9: Archive the build folder
     - name: Archive build folder
-      run: zip -r dynamic-notification-system-${{ steps.generate_tag.outputs.tag }}.zip build/
+      run: zip -r dynamic-notification-system-${{ env.RELEASE_TAG }}.zip build/
 
-    # Step 9: Create GitHub Release
+    # Step 10: Create GitHub Release
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
