@@ -51,6 +51,8 @@ func LoadPlugins(channelConfigs map[string]config.ChannelConfig) ([]config.Notif
 				"provider_api": channelConfig.ProviderAPI,
 				"phone_number": channelConfig.PhoneNumber,
 				"api_url":      channelConfig.ApiURL,
+				"topic":        channelConfig.Topic,
+				"server":       channelConfig.Server,
 			}
 
 			fmt.Printf("[DEBUG] Creating notifier instance for plugin %s with config: %+v\n", name, configMap)

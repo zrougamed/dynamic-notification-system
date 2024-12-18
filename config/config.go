@@ -6,9 +6,21 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Message represents the structure of the notification message
+type Message struct {
+	Topic    string        `json:"topic,omitempty"`
+	Title    string        `json:"title,omitempty"`
+	Text     string        `json:"message,omitempty"`
+	Tags     []string      `json:"tags,omitempty"`     // JSON array of tags
+	Priority int           `json:"priority,omitempty"` // Integer 1=min, 3=default, 5=max
+	Attach   string        `json:"attach,omitempty"`   // URL to a file
+	Email    string        `json:"email,omitempty"`    // Email address for receiving notifications
+	Actions  []interface{} `json:"actions,omitempty"`  // JSON Array of action buttons
+}
+
 type Notifier interface {
 	Name() string
-	Notify(message string) error
+	Notify(message *Message) error
 }
 
 type ChannelConfig struct {
@@ -25,6 +37,8 @@ type ChannelConfig struct {
 	ProviderAPI string `yaml:"provider_api,omitempty"`
 	PhoneNumber string `yaml:"phone_number,omitempty"`
 	ApiURL      string `yaml:"api_url,omitempty"`
+	Topic       string `yaml:"topic,omitempty"`
+	Server      string `yaml:"server,omitempty"`
 }
 
 type Config struct {

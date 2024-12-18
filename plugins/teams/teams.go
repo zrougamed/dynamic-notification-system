@@ -20,13 +20,13 @@ func (t *TeamsNotifier) Name() string {
 }
 
 // Notify sends a message to the Microsoft Teams webhook
-func (t *TeamsNotifier) Notify(message string) error {
+func (t *TeamsNotifier) Notify(message *config.Message) error {
 	if t.webhookURL == "" {
 		return errors.New("webhook URL is not set")
 	}
 
 	payload := map[string]string{
-		"text": message,
+		"text": message.Text,
 	}
 
 	jsonPayload, err := json.Marshal(payload)

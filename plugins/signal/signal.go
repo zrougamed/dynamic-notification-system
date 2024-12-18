@@ -18,8 +18,8 @@ func (s *SignalNotifier) Name() string {
 }
 
 // Notify sends a message via Signal
-func (s *SignalNotifier) Notify(message string) error {
-	fmt.Printf("Sending Signal message to %s: %s\n", s.phoneNumber, message)
+func (s *SignalNotifier) Notify(message *config.Message) error {
+	fmt.Printf("Sending Signal message to %s: %s\n", s.phoneNumber, message.Text)
 	// WIP
 	return nil
 }

@@ -20,13 +20,13 @@ func (w *WebhookNotifier) Name() string {
 }
 
 // Notify sends a message to a generic webhook
-func (w *WebhookNotifier) Notify(message string) error {
+func (w *WebhookNotifier) Notify(message *config.Message) error {
 	if w.url == "" {
 		return errors.New("webhook URL is not set")
 	}
 
 	payload := map[string]string{
-		"message": message,
+		"message": message.Text,
 	}
 
 	jsonPayload, err := json.Marshal(payload)

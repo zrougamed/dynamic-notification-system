@@ -18,8 +18,8 @@ func (p *PushNotifier) Name() string {
 }
 
 // Notify sends a push notification
-func (p *PushNotifier) Notify(message string) error {
-	fmt.Printf("Sending push notification to device %s with message: %s\n", p.device, message)
+func (p *PushNotifier) Notify(message *config.Message) error {
+	fmt.Printf("Sending push notification to device %s with message: %s\n", p.device, message.Text)
 	// WIP (e.g., Firebase, OneSignal)
 	return nil
 }

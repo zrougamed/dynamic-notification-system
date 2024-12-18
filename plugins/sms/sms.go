@@ -19,8 +19,8 @@ func (s *SMSNotifier) Name() string {
 }
 
 // Notify sends an SMS
-func (s *SMSNotifier) Notify(message string) error {
-	fmt.Printf("Sending SMS to %s: %s\n", s.phoneNumber, message)
+func (s *SMSNotifier) Notify(message *config.Message) error {
+	fmt.Printf("Sending SMS to %s: %s\n", s.phoneNumber, message.Text)
 	// WIP
 	return nil
 }
