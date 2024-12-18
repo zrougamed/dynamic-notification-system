@@ -36,6 +36,7 @@ build-plugins:
 	go build -buildmode=plugin -o build/plugins/sms.so plugins/sms/sms.go
 	go build -buildmode=plugin -o build/plugins/signal.so plugins/signal/signal.go
 	go build -buildmode=plugin -o build/plugins/rocketchat.so plugins/rocketchat/rocketchat.go
+	go build -buildmode=plugin -o build/plugins/ntfy.so plugins/ntfy/ntfy.go
 
 
 # Clean build artifacts

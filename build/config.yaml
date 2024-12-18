@@ -8,8 +8,8 @@ channels:
     webhook_url: "YOUR_TEAMS_WEBHOOK_URL"
 
   webhook:
-    enabled: true
-    url: "http://localhost:8000/webhook-raw"
+    enabled: false
+    url: "YOUR_GENERIC_WEBHOOK_URL"
 
   telegram:
     enabled: false
@@ -46,3 +46,10 @@ channels:
   rocketchat:
     enabled: false
     webhook_url: "https://chat.example.com/hooks/your-webhook-url"
+
+  ntfy:
+    enabled: false
+    api_key: "YOUR_NTFY_API_KEY"
+    topic: "NTFY_TOPIC"
+    server: "https://ntfy.sh/"
+

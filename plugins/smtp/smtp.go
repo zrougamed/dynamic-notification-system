@@ -22,10 +22,10 @@ func (s *SMTPNotifier) Name() string {
 }
 
 // Notify sends an email
-func (s *SMTPNotifier) Notify(message string) error {
+func (s *SMTPNotifier) Notify(message *config.Message) error {
 	auth := smtp.PlainAuth("", s.username, s.password, s.host)
 	to := []string{s.to}
-	msg := []byte(fmt.Sprintf("Subject: Notification\n\n%s", message))
+	msg := []byte(fmt.Sprintf("Subject: Notification\n\n%s", message.Text))
 	addr := fmt.Sprintf("%s:%s", s.host, s.port)
 
 	err := smtp.SendMail(addr, auth, s.username, to, msg)

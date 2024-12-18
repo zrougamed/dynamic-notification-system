@@ -20,14 +20,14 @@ func (d *DiscordNotifier) Name() string {
 }
 
 // Notify sends a message to the Discord webhook
-func (d *DiscordNotifier) Notify(message string) error {
+func (d *DiscordNotifier) Notify(message *config.Message) error {
 	if d.webhookURL == "" {
 		return errors.New("webhook URL is not set")
 	}
 
 	// Create payload
 	payload := map[string]string{
-		"content": message,
+		"content": message.Text,
 	}
 
 	// Convert payload to JSON
