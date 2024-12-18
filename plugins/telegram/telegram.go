@@ -14,9 +14,9 @@ func (t *TelegramNotifier) Name() string {
 	return "Telegram"
 }
 
-func (t *TelegramNotifier) Notify(message string) error {
+func (t *TelegramNotifier) Notify(message *config.Message) error {
 	// WIP
-	fmt.Printf("Sending message to Telegram: %s\n", message)
+	fmt.Printf("Sending message to Telegram: %s\n", message.Text)
 	return nil
 }
 
