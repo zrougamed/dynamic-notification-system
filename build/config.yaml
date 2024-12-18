@@ -47,9 +47,9 @@ channels:
     enabled: false
     webhook_url: "https://chat.example.com/hooks/your-webhook-url"
 
-  nfyt:
+  ntfy:
     enabled: false
-    api_key: "YOUR_NFYT_API_KEY"
-    topic: "NFYT_TOPIC"
+    api_key: "YOUR_NTFY_API_KEY"
+    topic: "NTFY_TOPIC"
     server: "https://ntfy.sh/"
 

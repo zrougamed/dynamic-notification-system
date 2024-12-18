@@ -11,16 +11,16 @@ import (
 	"net/http"
 )
 
-// NfytNotifier handles sending notifications to nfyt
-type NfytNotifier struct {
+// NtfyNotifier handles sending notifications to ntfy
+type NtfyNotifier struct {
 	apiKey string
 	Topic  string
 	Server string
 }
 
 // Name returns the name of the notifier
-func (n *NfytNotifier) Name() string {
-	return "Nfyt"
+func (n *NtfyNotifier) Name() string {
+	return "Ntfy"
 }
 
 // Helper function to validate the Actions
@@ -39,13 +39,13 @@ func validateActions(actions []interface{}) error {
 	return nil
 }
 
-// Notify sends a notification via nfyt using the Message object
-func (n *NfytNotifier) Notify(message *config.Message) error {
+// Notify sends a notification via ntfy using the Message object
+func (n *NtfyNotifier) Notify(message *config.Message) error {
 	if n.apiKey == "" {
-		return errors.New("missing API key for nfyt")
+		return errors.New("missing API key for ntfy")
 	}
 	if n.Topic == "" {
-		return errors.New("missing topic for nfyt")
+		return errors.New("missing topic for ntfy")
 	}
 
 	// Validate priority
@@ -97,10 +97,10 @@ func (n *NfytNotifier) Notify(message *config.Message) error {
 		}
 
 		// Print the full response for debugging
-		return fmt.Errorf("nfyt API returned status: %s\nHeaders: %v\nBody: %s",
+		return fmt.Errorf("ntfy API returned status: %s\nHeaders: %v\nBody: %s",
 			resp.Status, resp.Header, string(body))
 	}
-	fmt.Printf("Message sent to nfyt topic '%s': %s\n", n.Topic, message.Text)
+	fmt.Printf("Message sent to ntfy topic '%s': %s\n", n.Topic, message.Text)
 	return nil
 }
 
@@ -108,20 +108,20 @@ func (n *NfytNotifier) Notify(message *config.Message) error {
 func New(config map[string]interface{}) (config.Notifier, error) {
 	apiKey, ok := config["api_key"].(string)
 	if !ok || apiKey == "" {
-		return nil, errors.New("invalid or missing API key for nfyt")
+		return nil, errors.New("invalid or missing API key for ntfy")
 	}
 
 	topic, ok := config["topic"].(string)
 	if !ok || topic == "" {
-		return nil, errors.New("invalid or missing topic for nfyt")
+		return nil, errors.New("invalid or missing topic for ntfy")
 	}
 
 	server, ok := config["server"].(string)
 	if !ok || server == "" {
-		return nil, errors.New("invalid or missing server for nfyt")
+		return nil, errors.New("invalid or missing server for ntfy")
 	}
 
-	return &NfytNotifier{
+	return &NtfyNotifier{
 		apiKey: apiKey,
 		Topic:  topic,
 		Server: server,
