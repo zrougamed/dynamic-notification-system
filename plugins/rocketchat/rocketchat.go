@@ -20,13 +20,13 @@ func (r *RocketChatNotifier) Name() string {
 }
 
 // Notify sends a message to a Rocket.Chat webhook
-func (r *RocketChatNotifier) Notify(message string) error {
+func (r *RocketChatNotifier) Notify(message *config.Message) error {
 	if r.webhookURL == "" {
 		return errors.New("webhook URL is not set")
 	}
 
 	payload := map[string]string{
-		"text": message,
+		"text": message.Text,
 	}
 
 	jsonPayload, err := json.Marshal(payload)

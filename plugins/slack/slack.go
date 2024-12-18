@@ -20,13 +20,13 @@ func (s *SlackNotifier) Name() string {
 }
 
 // Notify sends a message to the Slack webhook
-func (s *SlackNotifier) Notify(message string) error {
+func (s *SlackNotifier) Notify(message *config.Message) error {
 	if s.webhookURL == "" {
 		return errors.New("webhook URL is not set")
 	}
 
 	payload := map[string]string{
-		"text": message,
+		"text": message.Text,
 	}
 
 	jsonPayload, err := json.Marshal(payload)

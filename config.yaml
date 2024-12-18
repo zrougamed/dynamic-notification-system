@@ -46,3 +46,10 @@ channels:
   rocketchat:
     enabled: false
     webhook_url: "https://chat.example.com/hooks/your-webhook-url"
+
+  nfyt:
+    enabled: false
+    api_key: "YOUR_NFYT_API_KEY"
+    topic: "NFYT_TOPIC"
+    server: "https://ntfy.sh/"
+
