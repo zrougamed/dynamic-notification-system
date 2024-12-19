@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  app:
+    image: mohamedzrouga/dynamic-notification-system
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db 
+    volumes:
+      - ./config.yaml:/app/config.yaml # Mount config.yaml
+    environment: 
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: db
+      MYSQL_DATABASE: database_name
+    restart: always 
+  db: 
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password 
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: database_name
+    ports:
+      - "3306:3306" 
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist data across container restarts
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Mount the init script
+volumes:
+  mysql_data:
