@@ -23,20 +23,9 @@ func (n *NtfyNotifier) Name() string {
 	return "Ntfy"
 }
 
-// Helper function to validate the Actions
-func validateActions(actions []interface{}) error {
-	validActions := map[string]bool{"view": true, "broadcast": true, "http": true}
-
-	for _, action := range actions {
-		actMap, ok := action.(map[string]string)
-		if !ok {
-			return errors.New("invalid action format")
-		}
-		if !validActions[actMap["action"]] {
-			return fmt.Errorf("invalid action type: %s. Valid values are 'view', 'broadcast', 'http'", actMap["action"])
-		}
-	}
-	return nil
+// Type returns the name of the notifier
+func (n *NtfyNotifier) Type() string {
+	return "ntfy"
 }
 
 // Notify sends a notification via ntfy using the Message object
@@ -51,12 +40,6 @@ func (n *NtfyNotifier) Notify(message *config.Message) error {
 	// Validate priority
 	if message.Priority < 1 || message.Priority > 5 {
 		return fmt.Errorf("invalid priority value: %d. Must be between 1 and 5", message.Priority)
-	}
-
-	// Validate Actions
-	err := validateActions(message.Actions)
-	if err != nil {
-		return fmt.Errorf("action validation failed: %v", err)
 	}
 
 	// Adding the Topic to the Payload
@@ -100,7 +83,7 @@ func (n *NtfyNotifier) Notify(message *config.Message) error {
 		return fmt.Errorf("ntfy API returned status: %s\nHeaders: %v\nBody: %s",
 			resp.Status, resp.Header, string(body))
 	}
-	fmt.Printf("Message sent to ntfy topic '%s': %s\n", n.Topic, message.Text)
+	fmt.Printf("Message sent to ntfy topic '%s': %s\n", n.Topic, message.Title)
 	return nil
 }
 

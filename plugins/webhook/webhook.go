@@ -19,6 +19,11 @@ func (w *WebhookNotifier) Name() string {
 	return "Webhook"
 }
 
+// Type returns the type of the notifier
+func (w *WebhookNotifier) Type() string {
+	return "webhook"
+}
+
 // Notify sends a message to a generic webhook
 func (w *WebhookNotifier) Notify(message *config.Message) error {
 	if w.url == "" {

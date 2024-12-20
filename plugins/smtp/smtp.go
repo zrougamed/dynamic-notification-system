@@ -21,6 +21,11 @@ func (s *SMTPNotifier) Name() string {
 	return "SMTP"
 }
 
+// Type returns the type of the notifier
+func (s *SMTPNotifier) Type() string {
+	return "smtp"
+}
+
 // Notify sends an email
 func (s *SMTPNotifier) Notify(message *config.Message) error {
 	auth := smtp.PlainAuth("", s.username, s.password, s.host)

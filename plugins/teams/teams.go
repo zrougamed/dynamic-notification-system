@@ -19,6 +19,11 @@ func (t *TeamsNotifier) Name() string {
 	return "Teams"
 }
 
+// Type returns the type of the notifier
+func (t *TeamsNotifier) Type() string {
+	return "teams"
+}
+
 // Notify sends a message to the Microsoft Teams webhook
 func (t *TeamsNotifier) Notify(message *config.Message) error {
 	if t.webhookURL == "" {

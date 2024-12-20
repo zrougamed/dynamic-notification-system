@@ -14,6 +14,10 @@ func (t *TelegramNotifier) Name() string {
 	return "Telegram"
 }
 
+func (t *TelegramNotifier) Type() string {
+	return "telegram"
+}
+
 func (t *TelegramNotifier) Notify(message *config.Message) error {
 	// WIP
 	fmt.Printf("Sending message to Telegram: %s\n", message.Text)
