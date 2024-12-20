@@ -1,6 +1,10 @@
 package config
 
 import (
+	"database/sql"
+	"database/sql/driver"
+	"encoding/json"
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -18,8 +22,37 @@ type Message struct {
 	Actions  []interface{} `json:"actions,omitempty"`  // JSON Array of action buttons
 }
 
+// Implement sql.Scanner for Message
+func (m *Message) Scan(value interface{}) error {
+	// Ensure the value is a byte slice
+	bytes, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("failed to scan Message: expected []byte, got %T", value)
+	}
+
+	// Unmarshal JSON into the Message struct
+	return json.Unmarshal(bytes, m)
+}
+
+// Implement driver.Valuer for inserting Message as JSON
+func (m Message) Value() (driver.Value, error) {
+	return json.Marshal(m)
+}
+
+// ScheduledJob struct
+type ScheduledJob struct {
+	ID                 int          `json:"id,omitempty"` // omitempty for POST requests
+	Name               string       `json:"name"`
+	NotificationType   string       `json:"notification_type"`
+	Recipient          string       `json:"recipient"`
+	Message            Message      `json:"message"`
+	ScheduleExpression string       `json:"schedule_expression"`
+	LastRun            sql.NullTime `json:"last_run,omitempty"`
+}
+
 type Notifier interface {
 	Name() string
+	Type() string
 	Notify(message *Message) error
 }
 
