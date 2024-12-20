@@ -75,7 +75,16 @@ type ChannelConfig struct {
 }
 
 type Config struct {
+	Database DatabaseConfig           `yaml:"database"`
 	Channels map[string]ChannelConfig `yaml:"channels"`
+}
+
+type DatabaseConfig struct {
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Name     string `yaml:"name"`
 }
 
 func LoadConfig(path string) (*Config, error) {
