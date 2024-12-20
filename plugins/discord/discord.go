@@ -19,6 +19,11 @@ func (d *DiscordNotifier) Name() string {
 	return "Discord"
 }
 
+// Type returns the type of the notifier
+func (d *DiscordNotifier) Type() string {
+	return "discord"
+}
+
 // Notify sends a message to the Discord webhook
 func (d *DiscordNotifier) Notify(message *config.Message) error {
 	if d.webhookURL == "" {

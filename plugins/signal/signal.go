@@ -17,6 +17,11 @@ func (s *SignalNotifier) Name() string {
 	return "Signal"
 }
 
+// Type returns the type of the notifier
+func (s *SignalNotifier) Type() string {
+	return "signal"
+}
+
 // Notify sends a message via Signal
 func (s *SignalNotifier) Notify(message *config.Message) error {
 	fmt.Printf("Sending Signal message to %s: %s\n", s.phoneNumber, message.Text)

@@ -19,6 +19,11 @@ func (s *SlackNotifier) Name() string {
 	return "Slack"
 }
 
+// Type returns the type of the notifier
+func (s *SlackNotifier) Type() string {
+	return "slack"
+}
+
 // Notify sends a message to the Slack webhook
 func (s *SlackNotifier) Notify(message *config.Message) error {
 	if s.webhookURL == "" {

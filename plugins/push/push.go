@@ -17,6 +17,11 @@ func (p *PushNotifier) Name() string {
 	return "Push Notification"
 }
 
+// Type returns the type of the notifier
+func (p *PushNotifier) Type() string {
+	return "push"
+}
+
 // Notify sends a push notification
 func (p *PushNotifier) Notify(message *config.Message) error {
 	fmt.Printf("Sending push notification to device %s with message: %s\n", p.device, message.Text)

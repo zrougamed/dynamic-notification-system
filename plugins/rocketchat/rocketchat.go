@@ -19,6 +19,11 @@ func (r *RocketChatNotifier) Name() string {
 	return "Rocket.Chat"
 }
 
+// Type returns the type of the notifier
+func (r *RocketChatNotifier) Type() string {
+	return "rocket.Chat"
+}
+
 // Notify sends a message to a Rocket.Chat webhook
 func (r *RocketChatNotifier) Notify(message *config.Message) error {
 	if r.webhookURL == "" {

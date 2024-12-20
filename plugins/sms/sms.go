@@ -18,6 +18,11 @@ func (s *SMSNotifier) Name() string {
 	return "SMS"
 }
 
+// Type returns the type of the notifier
+func (s *SMSNotifier) Type() string {
+	return "sms"
+}
+
 // Notify sends an SMS
 func (s *SMSNotifier) Notify(message *config.Message) error {
 	fmt.Printf("Sending SMS to %s: %s\n", s.phoneNumber, message.Text)
