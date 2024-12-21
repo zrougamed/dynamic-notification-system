@@ -33,29 +33,37 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading plugins: %v", err)
 	}
+	if cfg.Scheduler { // Check if scheduler is enabled
+		fmt.Println("Starting scheduled jobs...")
+		// Construct DB connection string
+		dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+			cfg.Database.User,
+			cfg.Database.Password,
+			cfg.Database.Host,
+			cfg.Database.Port,
+			cfg.Database.Name,
+		)
 
-	// Construct DB connection string
-	dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
-		cfg.Database.User,
-		cfg.Database.Password,
-		cfg.Database.Host,
-		cfg.Database.Port,
-		cfg.Database.Name,
-	)
-
-	db, err = sql.Open("mysql", dbConnStr)
-	if err != nil {
-		log.Fatal(err)
+		db, err = sql.Open("mysql", dbConnStr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer db.Close()
+		cronInstance = cron.New()
+		loadJobs(cronInstance)
+		fmt.Println("Starting scheduled jobs...")
+		go cronInstance.Start()
+	} else {
+		fmt.Println("Scheduler is disabled in the configuration.")
 	}
-	defer db.Close()
-	cronInstance = cron.New()
-	loadJobs(cronInstance)
-	r := mux.NewRouter()
-	r.HandleFunc("/jobs", handlePostJob).Methods("POST")
-	r.HandleFunc("/jobs", handleGetJobs).Methods("GET") // Add a GET endpoint to return current jobs
 
-	fmt.Println("Starting scheduled jobs...")
-	go cronInstance.Start()
+	r := mux.NewRouter()
+	if cfg.Scheduler {
+		r.HandleFunc("/jobs", handlePostJob).Methods("POST")
+		r.HandleFunc("/jobs", handleGetJobs).Methods("GET")
+	} else {
+		fmt.Println("Scheduling endpoints are disabled.")
+	}
 
 	fmt.Println("Server listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))

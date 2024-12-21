@@ -75,8 +75,9 @@ type ChannelConfig struct {
 }
 
 type Config struct {
-	Database DatabaseConfig           `yaml:"database"`
-	Channels map[string]ChannelConfig `yaml:"channels"`
+	Database  DatabaseConfig           `yaml:"database"`
+	Channels  map[string]ChannelConfig `yaml:"channels"`
+	Scheduler bool                     `yaml:"scheduler"`
 }
 
 type DatabaseConfig struct {
