@@ -37,7 +37,18 @@ jobs:
     - name: Generate release tag
       id: generate_tag
       run: |
-        RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')
+        # Fetch the latest tag
+        latest_tag=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+        echo "Latest Tag: $latest_tag"
+        
+        # Increment version (assumes semantic versioning)
+        IFS='.' read -r -a version_parts <<< "${latest_tag#v}"
+        major=${version_parts[0]}
+        minor=${version_parts[1]}
+        patch=${version_parts[2]}
+        RELEASE_TAG="v$major.$minor.$((patch + 1))"
+
+
         echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
 
     # Step 6: Create Git tag
