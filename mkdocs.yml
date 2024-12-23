@@ -1,0 +1,26 @@
+
+site_name: Dynamic Notification System
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Usage: usage.md
+  - Developer Guide: developer_guide.md
+  - Technical Docs:
+      - Main Module: technical_docs/main.md
+      - Scheduler Module: technical_docs/scheduler.md
+      - Config Module: technical_docs/config.md
+  - Contributing: contributing.md
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: pink
+  pygments_style: monokai
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
