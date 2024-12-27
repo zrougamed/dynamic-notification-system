@@ -1,8 +1,8 @@
-scheduler: false
+scheduler: true
 database:
   user: "user"
   password: "password"
-  host: "localhost"
+  host: "db" # to connect to the db packaged with docker compose stack
   port: 3306
   name: "database_name"
 

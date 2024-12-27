@@ -16,6 +16,6 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 ENV CGO_ENABLED 1
 WORKDIR /app
 COPY --from=builder /app/build /app
-# COPY config.yaml /app/config.yaml # Not recommended uncomment this to add your config to the image
+# COPY config.yaml /app/config.yaml # Not recommended, uncomment this to add your config to the image
 EXPOSE 8080
 CMD ["/app/main"]

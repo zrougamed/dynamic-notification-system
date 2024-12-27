@@ -4,3 +4,5 @@ README.md
 CONTRIBUTING.md
 Dockerfile
 build
+site/
+venv/
