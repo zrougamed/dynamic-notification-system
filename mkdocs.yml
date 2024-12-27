@@ -8,6 +8,7 @@ nav:
   - Technical Docs:
       - Main Module: technical_docs/main.md
       - Scheduler Module: technical_docs/scheduler.md
+      - Instant Notify Module: technical_docs/notifier.md
       - Config Module: technical_docs/config.md
   - Contributing: contributing.md
 theme:

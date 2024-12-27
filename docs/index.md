@@ -103,8 +103,9 @@ channels:
 3. [Developer Guide](developer_guide.md)
 4. [Main Module](technical_docs/main.md)
 5. [Scheduler Module](technical_docs/scheduler.md)
-6. [Config Module](technical_docs/config.md)
-7. [Contributing](contributing.md)
+6. [Notifier Module](technical_docs/notifier.md)
+7. [Config Module](technical_docs/config.md)
+8. [Contributing](contributing.md)
 
 ---
 
