@@ -2,6 +2,7 @@ package main
 
 import (
 	"dynamic-notification-system/config"
+	"dynamic-notification-system/notifier"
 	"dynamic-notification-system/plugins"
 	"dynamic-notification-system/scheduler"
 	"fmt"
@@ -25,6 +26,9 @@ func main() {
 		log.Fatalf("Error loading plugins: %v", err)
 	}
 
+	// Pass the loaded notifiers to the notifier package
+	notifier.SetNotifiers(notifiers)
+
 	// Initialize Scheduler if enabled
 	if cfg.Scheduler {
 		fmt.Println("Starting scheduled jobs...")
@@ -39,12 +43,15 @@ func main() {
 
 	r := mux.NewRouter()
 	if cfg.Scheduler {
+		// Scheduled notification endpoints
 		r.HandleFunc("/schema/job", scheduler.GetJobSchema())
 		r.HandleFunc("/jobs", scheduler.HandlePostJob).Methods("POST")
 		r.HandleFunc("/jobs", scheduler.HandleGetJobs).Methods("GET")
 	} else {
 		fmt.Println("Scheduling endpoints are disabled.")
 	}
+	// Instant notification endpoint
+	r.HandleFunc("/notify", notifier.HandlePostJob).Methods("POST")
 
 	fmt.Println("Server listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
