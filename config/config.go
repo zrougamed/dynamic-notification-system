@@ -50,6 +50,13 @@ type ScheduledJob struct {
 	LastRun            sql.NullTime `json:"last_run,omitempty"`
 }
 
+// InstantJob struct
+type InstantJob struct {
+	NotificationType string  `json:"notification_type"`
+	Recipient        string  `json:"recipient"`
+	Message          Message `json:"message"`
+}
+
 type Notifier interface {
 	Name() string
 	Type() string
