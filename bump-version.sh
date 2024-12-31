@@ -1,6 +1,5 @@
 #!/bin/bash
 git fetch --tags 
-# latest_tag=$(git describe --tags --abbrev=0 2>/dev/null)
 latest_tag=$(git tag --sort=committerdate | grep -o 'v.*' | sort -r | head -1)
 
 if [[ -z "$latest_tag" ]]; then
@@ -19,7 +18,7 @@ if git log --oneline -1 | grep -q "BREAKING CHANGE"; then
 elif git log --oneline -1 | grep -q "feat"; then
   minor=$((minor + 1))
   patch=0
-elif git log --oneline -1 | grep -q "fix"; then
+else
   patch=$((patch + 1))
 fi
 
