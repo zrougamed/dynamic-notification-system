@@ -1,4 +1,3 @@
-# This workflow builds the Go project, its plugins, and creates a release with the build folder
 name: Go Build and Release
 
 on:

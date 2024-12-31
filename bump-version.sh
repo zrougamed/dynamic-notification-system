@@ -1,5 +1,5 @@
 #!/bin/bash
-
+git fetch --tags 
 latest_tag=$(git describe --tags --abbrev=0 2>/dev/null)
 # latest_tag=$(git tag --sort=committerdate | grep -o 'v.*' | sort -r | head -1 2>/dev/null)
 
