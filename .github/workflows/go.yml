@@ -13,6 +13,9 @@ jobs:
     # Step 1: Check out the code
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-tags: true
+
 
     # Step 2: Set up Go environment
     - name: Set up Go
